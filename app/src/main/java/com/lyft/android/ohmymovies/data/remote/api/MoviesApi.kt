@@ -1,6 +1,6 @@
-package com.lyft.android.ohmymovies.data.api
+package com.lyft.android.ohmymovies.data.remote.api
 
-import com.lyft.android.ohmymovies.data.api.models.MoviesResponse
+import com.lyft.android.ohmymovies.data.remote.api.models.MoviesResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

@@ -1,4 +1,4 @@
-package com.lyft.android.ohmymovies.data.api
+package com.lyft.android.ohmymovies.data.remote.api
 
 import com.lyft.android.ohmymovies.BuildConfig
 import okhttp3.Interceptor

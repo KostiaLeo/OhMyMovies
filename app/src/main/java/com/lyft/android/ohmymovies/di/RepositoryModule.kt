@@ -1,7 +1,7 @@
 package com.lyft.android.ohmymovies.di
 
 import com.lyft.android.ohmymovies.data.repository.MoviesRepository
-import com.lyft.android.ohmymovies.data.repository.OnlineMoviesRepository
+import com.lyft.android.ohmymovies.data.repository.OfflineFirstMoviesRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindMoviesRepository(remoteMoviesRepository: OnlineMoviesRepository): MoviesRepository
+    fun bindMoviesRepository(remoteMoviesRepository: OfflineFirstMoviesRepository): MoviesRepository
 }

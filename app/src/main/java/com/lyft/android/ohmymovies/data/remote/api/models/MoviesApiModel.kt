@@ -1,4 +1,4 @@
-package com.lyft.android.ohmymovies.data.api.models
+package com.lyft.android.ohmymovies.data.remote.api.models
 
 data class MoviesApiModel(
     val adult: Boolean = false,

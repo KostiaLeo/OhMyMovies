@@ -1,8 +1,9 @@
 package com.lyft.android.ohmymovies.data.repository
 
-import com.lyft.android.ohmymovies.data.repository.models.MovieModel
 import com.lyft.android.ohmymovies.data.repository.models.MoviesSection
+import kotlinx.coroutines.flow.Flow
 
 interface MoviesRepository {
-    suspend fun getMoviesSections(): List<MoviesSection>
+    val moviesSectionsFlow: Flow<List<MoviesSection>>
+    suspend fun syncMovies()
 }

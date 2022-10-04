@@ -1,7 +1,7 @@
 package com.lyft.android.ohmymovies.di
 
-import com.lyft.android.ohmymovies.data.api.ApiKeyInterceptor
-import com.lyft.android.ohmymovies.data.api.MoviesApi
+import com.lyft.android.ohmymovies.data.remote.api.ApiKeyInterceptor
+import com.lyft.android.ohmymovies.data.remote.api.MoviesApi
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module

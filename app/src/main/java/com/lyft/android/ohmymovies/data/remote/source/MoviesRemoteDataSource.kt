@@ -1,8 +1,8 @@
-package com.lyft.android.ohmymovies.data.source
+package com.lyft.android.ohmymovies.data.remote.source
 
-import com.lyft.android.ohmymovies.data.api.models.MoviesApiModel
+import com.lyft.android.ohmymovies.data.remote.api.models.MoviesApiModel
 
-interface MoviesDataSource {
+interface MoviesRemoteDataSource {
     suspend fun getTrending(): List<MoviesApiModel>
     suspend fun getTopRated(): List<MoviesApiModel>
     suspend fun getPopular(): List<MoviesApiModel>

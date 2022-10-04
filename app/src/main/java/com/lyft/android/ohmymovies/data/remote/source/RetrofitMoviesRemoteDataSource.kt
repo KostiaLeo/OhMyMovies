@@ -1,16 +1,15 @@
-package com.lyft.android.ohmymovies.data.source
+package com.lyft.android.ohmymovies.data.remote.source
 
-import com.lyft.android.ohmymovies.data.api.MoviesApi
-import com.lyft.android.ohmymovies.data.api.models.MoviesApiModel
-import com.lyft.android.ohmymovies.data.api.models.MoviesResponse
+import com.lyft.android.ohmymovies.data.remote.api.MoviesApi
+import com.lyft.android.ohmymovies.data.remote.api.models.MoviesApiModel
 import javax.inject.Inject
 
 private const val DEFAULT_MEDIA_TYPE = "movie"
 private const val DEFAULT_TIME_WINDOW = "week"
 
-class RetrofitMoviesDataSource @Inject constructor(
+class RetrofitMoviesRemoteDataSource @Inject constructor(
     private val moviesApi: MoviesApi
-): MoviesDataSource {
+): MoviesRemoteDataSource {
     override suspend fun getTrending(): List<MoviesApiModel> {
         return moviesApi.getTrending(DEFAULT_MEDIA_TYPE, DEFAULT_TIME_WINDOW).results
     }

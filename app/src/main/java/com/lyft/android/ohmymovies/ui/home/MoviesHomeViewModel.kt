@@ -4,7 +4,8 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lyft.android.ohmymovies.R
-import com.lyft.android.ohmymovies.domain.GetMoviesSectionsUseCase
+import com.lyft.android.ohmymovies.domain.ObserveMoviesSectionsUseCase
+import com.lyft.android.ohmymovies.domain.SyncMoviesUseCase
 import com.lyft.android.ohmymovies.utils.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -16,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MoviesHomeViewModel @Inject constructor(
-    private val getMoviesSectionsUseCase: GetMoviesSectionsUseCase
+    private val observeMoviesSectionsUseCase: ObserveMoviesSectionsUseCase,
+    private val syncMoviesUseCase: SyncMoviesUseCase
 ) : ViewModel() {
 
     private val _moviesHomeStateFlow = MutableStateFlow(MoviesHomeUiState())
@@ -27,18 +29,28 @@ class MoviesHomeViewModel @Inject constructor(
     }
 
     init {
-        loadMoviesSections()
+        syncMovies()
+        observeMoviesSections()
     }
 
-    private fun loadMoviesSections() {
+    private fun observeMoviesSections() {
         viewModelScope.launch(exceptionHandler) {
-            val sections = getMoviesSectionsUseCase()
-            _moviesHomeStateFlow.update {
-                it.copy(
-                    isLoading = false,
-                    sections = sections
-                )
+            observeMoviesSectionsUseCase().collect { sections ->
+                _moviesHomeStateFlow.update {
+                    it.copy(sections = sections)
+                }
             }
+        }
+    }
+
+    fun syncMovies() {
+        if (_moviesHomeStateFlow.value.isLoading) {
+            return
+        }
+        viewModelScope.launch(exceptionHandler) {
+            _moviesHomeStateFlow.update { it.copy(isLoading = true) }
+            syncMoviesUseCase()
+            _moviesHomeStateFlow.update { it.copy(isLoading = false) }
         }
     }
 
