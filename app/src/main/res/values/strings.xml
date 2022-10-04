@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Oh My Movies</string>
+    <string name="generic_error_message">Oops, something went wrong. Try again later</string>
+    <string name="trending">Trending</string>
+    <string name="popular">Popular</string>
+    <string name="top_rated">Top rated</string>
+    <string name="upcoming">Upcoming</string>
+</resources>
