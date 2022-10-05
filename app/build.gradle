@@ -63,6 +63,7 @@ dependencies {
     implementation "com.github.skydoves:landscapist-glide:1.6.1"
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
     implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
+    implementation "androidx.paging:paging-compose:1.0.0-alpha10"
 
     // Architecture Components
     implementation "androidx.room:room-runtime:$roomVersion"

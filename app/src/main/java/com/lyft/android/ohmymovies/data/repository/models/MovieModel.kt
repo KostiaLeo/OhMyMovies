@@ -7,6 +7,7 @@ data class MovieModel(
     val id: Int,
     val title: String,
     val posterPath: String,
+    val backdropPath: String,
     val rating: Double
 )
 
@@ -14,4 +15,8 @@ data class MovieModel(
 private const val IMAGE_BASE_URL = "https://image.tmdb.org/t/p/"
 fun MovieModel.posterFullUrl(): String {
     return "$IMAGE_BASE_URL/w500$posterPath"
+}
+
+fun MovieModel.backdropFullUrl(): String {
+    return "$IMAGE_BASE_URL/w500$backdropPath"
 }

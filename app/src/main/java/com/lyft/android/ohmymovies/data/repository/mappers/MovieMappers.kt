@@ -2,16 +2,24 @@ package com.lyft.android.ohmymovies.data.repository.mappers
 
 import com.lyft.android.ohmymovies.data.local.entities.MovieEntity
 import com.lyft.android.ohmymovies.data.local.entities.SectionWithMoviesDTO
-import com.lyft.android.ohmymovies.data.remote.api.models.MoviesApiModel
+import com.lyft.android.ohmymovies.data.remote.models.MoviesApiModel
 import com.lyft.android.ohmymovies.data.repository.models.MovieModel
 import com.lyft.android.ohmymovies.data.repository.models.MovieSectionTitle
 import com.lyft.android.ohmymovies.data.repository.models.MoviesSection
 import com.lyft.android.ohmymovies.utils.UiText
 
+fun MoviesApiModel.asExternalModel() = MovieModel(
+    id = id,
+    title = title,
+    posterPath = poster_path,
+    backdropPath = backdrop_path.orEmpty(),
+    rating = vote_average
+)
+
 fun MoviesApiModel.asEntity() = MovieEntity(
     id,
     adult,
-    backdrop_path,
+    backdrop_path.orEmpty(),
     genre_ids,
     media_type,
     original_language,
@@ -35,5 +43,6 @@ fun MovieEntity.asExternalModel() = MovieModel(
     id = id,
     title = title,
     posterPath = poster_path,
-    rating = vote_average
+    rating = vote_average,
+    backdropPath = backdrop_path
 )

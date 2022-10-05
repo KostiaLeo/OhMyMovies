@@ -2,7 +2,7 @@ package com.lyft.android.ohmymovies.data.repository
 
 import com.lyft.android.ohmymovies.data.local.entities.SectionWithMoviesDTO
 import com.lyft.android.ohmymovies.data.local.source.MoviesLocalDataSource
-import com.lyft.android.ohmymovies.data.remote.api.models.MoviesApiModel
+import com.lyft.android.ohmymovies.data.remote.models.MoviesApiModel
 import com.lyft.android.ohmymovies.data.remote.source.MoviesRemoteDataSource
 import com.lyft.android.ohmymovies.data.repository.mappers.asEntity
 import com.lyft.android.ohmymovies.data.repository.mappers.asMoviesSectionModel
@@ -37,7 +37,8 @@ class OfflineFirstMoviesRepository @Inject constructor(
             )
             collectionsAsync.forEach { (section, moviesAsync) ->
                 val moviesApiModels = moviesAsync.await()
-                moviesLocalDataSource.upsertMoviesToSection(section.code, moviesApiModels.map(MoviesApiModel::asEntity))
+                moviesLocalDataSource.upsertMoviesToSection(section.code, moviesApiModels.map(
+                    MoviesApiModel::asEntity))
             }
         }
     }

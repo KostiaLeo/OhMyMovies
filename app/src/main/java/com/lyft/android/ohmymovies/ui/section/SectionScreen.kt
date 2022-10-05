@@ -1,32 +1,20 @@
-@file:OptIn(ExperimentalLifecycleComposeApi::class)
-
-package com.lyft.android.ohmymovies.ui.home
+package com.lyft.android.ohmymovies.ui.section
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -36,93 +24,43 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.items
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.lyft.android.ohmymovies.data.repository.models.MovieModel
-import com.lyft.android.ohmymovies.data.repository.models.MoviesSection
-import com.lyft.android.ohmymovies.data.repository.models.posterFullUrl
+import com.lyft.android.ohmymovies.data.repository.models.backdropFullUrl
 import com.skydoves.landscapist.glide.GlideImage
 import com.skydoves.landscapist.rememberDrawablePainter
 
 @Composable
-fun MoviesHomeScreen(
-    viewModel: MoviesHomeViewModel = hiltViewModel(),
-    openSection: () -> Unit
+fun SectionScreen(
+    viewModel: SectionViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.moviesHomeStateFlow.collectAsStateWithLifecycle()
+    val moviesPagingItems = viewModel.moviesPagingFlow.collectAsLazyPagingItems()
 
-    val scaffoldState = rememberScaffoldState()
-
-    Scaffold(
-        scaffoldState = scaffoldState,
-        content = {
-            SwipeRefresh(
-                modifier = Modifier.padding(it),
-                state = rememberSwipeRefreshState(isRefreshing = uiState.isLoading),
-                onRefresh = viewModel::syncMovies
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .verticalScroll(rememberScrollState()),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    uiState.sections.forEach { section ->
-                        MoviesSection(section, openSection)
-                    }
-                }
-            }
-        }
-    )
-
-    uiState.errorMessage?.let { message ->
-        val snackbarText = message.asString()
-        LaunchedEffect(scaffoldState, viewModel, message, snackbarText) {
-            scaffoldState.snackbarHostState.showSnackbar(snackbarText)
-            viewModel.onErrorShown()
+    LazyColumn {
+        items(lazyPagingItems = moviesPagingItems) { movie ->
+            BackdropMovieItem(movie)
         }
     }
 }
 
 @Composable
-private fun MoviesSection(movieSection: MoviesSection, onTitleClicked: () -> Unit) {
-    Spacer(modifier = Modifier.height(8.dp))
-
-    Text(
-        modifier = Modifier.padding(start = 8.dp).clickable(onClick = onTitleClicked),
-        text = movieSection.title.asString(),
-        style = MaterialTheme.typography.h4
-    )
-
-    Spacer(modifier = Modifier.height(4.dp))
-
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(horizontal = 8.dp)
-    ) {
-        items(movieSection.movies, key = { it.id }) { movie ->
-            MovieItem(movie)
-        }
-    }
-}
-
-@Composable
-fun MovieItem(movie: MovieModel) {
+fun BackdropMovieItem(movie: MovieModel?) {
     Surface(
         modifier = Modifier
-            .height(200.dp)
-            .width(160.dp),
+            .fillMaxWidth()
+            .height(250.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = 4.dp
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            MoviePoster(movie)
+            movie ?: return@Box
+
+            MovieBackdrop(movie)
 
             Column(
                 modifier = Modifier
@@ -144,7 +82,7 @@ fun MovieItem(movie: MovieModel) {
 }
 
 @Composable
-private fun MoviePoster(movie: MovieModel) {
+private fun MovieBackdrop(movie: MovieModel) {
     GlideImage(
         requestBuilder = {
             Glide
@@ -152,10 +90,10 @@ private fun MoviePoster(movie: MovieModel) {
                 .asDrawable()
                 .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .thumbnail(Glide.with(LocalContext.current).asDrawable().sizeMultiplier(0.6f))
-                .transition(withCrossFade())
+                .transition(DrawableTransitionOptions.withCrossFade())
         },
         contentScale = ContentScale.FillWidth,
-        imageModel = movie.posterFullUrl(),
+        imageModel = movie.backdropFullUrl(),
         modifier = Modifier.fillMaxSize(),
         success = {
             Box(modifier = Modifier.fillMaxSize()) {

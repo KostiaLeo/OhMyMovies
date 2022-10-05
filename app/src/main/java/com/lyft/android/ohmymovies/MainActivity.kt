@@ -10,7 +10,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.lyft.android.ohmymovies.ui.home.MoviesHomeScreen
+import com.lyft.android.ohmymovies.ui.navigation.AppNavHost
 import com.lyft.android.ohmymovies.ui.theme.OhMyMoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +25,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    MoviesHomeScreen()
+                    AppNavHost()
                 }
             }
         }

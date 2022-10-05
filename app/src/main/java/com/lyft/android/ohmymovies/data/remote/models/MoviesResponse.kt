@@ -1,4 +1,4 @@
-package com.lyft.android.ohmymovies.data.remote.api.models
+package com.lyft.android.ohmymovies.data.remote.models
 
 data class MoviesResponse(
     val page: Int = 0,

@@ -1,8 +1,8 @@
-package com.lyft.android.ohmymovies.data.remote.api.models
+package com.lyft.android.ohmymovies.data.remote.models
 
 data class MoviesApiModel(
     val adult: Boolean = false,
-    val backdrop_path: String = "",
+    val backdrop_path: String? = "",
     val genre_ids: List<Int> = listOf(),
     val id: Int = 0,
     val media_type: String = "",
